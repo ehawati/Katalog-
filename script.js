@@ -554,9 +554,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const defaultFooterText = "Terima kasih sehat selalu ya 🤲 🙏🥰";
         const qrisImagePath = "qris.webp";
-        // Hapus baris STRUK TRANSAKSI HARINFOOD di hasil cetak
-        // dan hapus juga footer text terakhir jika sudah ada, agar tidak dobel
-        let isiTanpaHeader = shareResult.message.replace(/^\*STRUK TRANSAKSI HARINFOOD\*\n/, '');
+        // Hapus baris KEDAI HARINFOOD di hasil cetak dan juga footer terakhir jika sudah ada
+        let isiTanpaHeader = shareResult.message.replace(/^\*KEDAI HARINFOOD\*\n/, '');
         isiTanpaHeader = isiTanpaHeader.replace(/----------------------------\nTerima kasih sehat selalu ya [^\n]+$/g, '');
         let printContent = `
             <html>
@@ -683,13 +682,19 @@ document.addEventListener('DOMContentLoaded', () => {
         printOptionsPopup.style.display = 'none';
     });
 
-    // ... sisanya (manual order, barcode, reset, dsb) sama seperti sebelumnya ...
+    // === Modal manual order dengan ENTER di qty ===
     addManualOrderFab.addEventListener('click', () => {
         manualOrderModal.style.display = 'flex';
         manualProductNameInput.value = '';
         manualProductPriceInput.value = '';
         manualProductQtyInput.value = '1';
         manualProductNameInput.focus();
+    });
+    manualProductQtyInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            window.addManualOrderItem();
+        }
     });
     window.closeManualOrderModal = function() {
         manualOrderModal.style.display = 'none';
